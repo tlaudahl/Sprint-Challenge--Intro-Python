@@ -1,6 +1,13 @@
+import csv
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
-
+class City:
+  def __init__(self, name, lat, lon):
+    self.name = name
+    self.lat = lat
+    self.lon = lon
+  def __str__(self):
+    return f'{self.name}, {self.lat}, {self.lon}'
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -16,11 +23,29 @@
 # should not be loaded into a City object.
 cities = []
 
+with open('cities.csv', newline='') as f:
+  reader = csv.reader(f)
+  first_line = True
+  for row in reader:
+    if first_line:
+      first_line = False
+    else:
+      City(row[0], row[3], row[4])
+
+
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
+  with open('cities.csv', newline='') as f:
+    reader = csv.reader(f)
+    first_line = True
+    for row in reader:
+      # Skip the header row
+      if first_line:
+        first_line = False
+      else:
+        cities.append(City(row[0], float(row[3]), float(row[4])))
     return cities
 
 cityreader(cities)
@@ -67,5 +92,22 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-
+  with open('cities.csv', newline='') as f:
+    reader = csv.reader(f)
+    first_line = True
+    for row in reader:
+      if first_line:
+        first_line = False
+      else:
+        # cityreader_stretch(45, -100, 32, -120, self.cities)
+        # cityreader_stretch(40, -50, 12, -120, self.cities)
+        # lat1 > lat2 ==> row[3] <= 45/40 and row[3] >= 32/12
+        # lon1 > lon2 ==> row[4] <= -100/-50 and row[4] >= -120
+        max_lat = max(lat1, lat2)
+        min_lat = min(lat1, lat2)
+        max_lon = max(lon1, lon2)
+        min_lon = min(lon1, lon2)
+        if float(row[3]) <= max_lat and float(row[3]) >= min_lat:
+          if float(row[4]) <= max_lon and float(row[4]) >= min_lon:
+            within.append(City(row[0], float(row[3]), float(row[4])))
   return within
