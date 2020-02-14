@@ -6,8 +6,8 @@ class City:
     self.name = name
     self.lat = lat
     self.lon = lon
-  # def __str__(self):
-  #   return f'{self.name}, {self.lat}, {self.lon}'
+  def __str__(self):
+    return f'{self.name}, {self.lat}, {self.lon}'
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -41,6 +41,7 @@ def cityreader(cities=[]):
     reader = csv.reader(f)
     first_line = True
     for row in reader:
+      # Skip the header row
       if first_line:
         first_line = False
       else:
@@ -91,5 +92,23 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-
+  with open('cities.csv', newline='') as f:
+    reader = csv.reader(f)
+    first_line = True
+    for row in reader:
+      if first_line:
+        first_line = False
+      else:
+        # cityreader_stretch(45, -100, 32, -120, self.cities)
+        # cityreader_stretch(40, -50, 12, -120, self.cities)
+        # lat1 > lat2 ==> row[3] <= 45/40 and row[3] >= 32/12
+        # lon1 > lon2 ==> row[4] <= -100/-50 and row[4] >= -120
+        if float(row[3]) <= lat1 and float(row[3]) >= lat2:
+          if float(row[4]) <= lon1 and float(row[4]) >= lon2:
+            print(f'IF STATEMENT {row[0]}, {row[3]}, {row[4]}')
+            within.append(City(row[0], float(row[3]), float(row[4])))
   return within
+
+print(cityreader_stretch(45, -100, 32, -120, cities))
+print('///////////////////////////////////////////////')
+print(cityreader_stretch(40, -50, 12, -120, cities))
