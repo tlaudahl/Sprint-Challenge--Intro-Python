@@ -103,12 +103,11 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
         # cityreader_stretch(40, -50, 12, -120, self.cities)
         # lat1 > lat2 ==> row[3] <= 45/40 and row[3] >= 32/12
         # lon1 > lon2 ==> row[4] <= -100/-50 and row[4] >= -120
-        if float(row[3]) <= lat1 and float(row[3]) >= lat2:
-          if float(row[4]) <= lon1 and float(row[4]) >= lon2:
-            print(f'IF STATEMENT {row[0]}, {row[3]}, {row[4]}')
+        max_lat = max(lat1, lat2)
+        min_lat = min(lat1, lat2)
+        max_lon = max(lon1, lon2)
+        min_lon = min(lon1, lon2)
+        if float(row[3]) <= max_lat and float(row[3]) >= min_lat:
+          if float(row[4]) <= max_lon and float(row[4]) >= min_lon:
             within.append(City(row[0], float(row[3]), float(row[4])))
   return within
-
-print(cityreader_stretch(45, -100, 32, -120, cities))
-print('///////////////////////////////////////////////')
-print(cityreader_stretch(40, -50, 12, -120, cities))
